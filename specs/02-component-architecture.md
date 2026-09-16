@@ -1,6 +1,6 @@
 # SPEC 02 — Arquitectura de componentes
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** spe
 > **Fecha:** 2026-09-15
 > **Objetivo:** Reorganizar los componentes existentes por dominio y compartidos, y documentar convenciones de arquitectura y nombres para OpenDayCare.
