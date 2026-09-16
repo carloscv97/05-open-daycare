@@ -16,6 +16,18 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - El estilo usa Tailwind CSS 4 mediante `@import "tailwindcss"` en `app/globals.css`; no hay archivo de configuración de Tailwind.
 - `references/screenshots/` y `references/pantallas/` contienen material de referencia visual y HTML; Next.js no los compila como parte de la aplicación.
 
+## Arquitectura de componentes
+
+- Organiza los componentes por dominio en `components/<dominio>/`; los específicos de una capacidad viven junto a su dominio.
+- Promueve un componente a `components/shared/` solo cuando tenga reutilización real entre dominios de OpenDayCare. Este directorio no implica componentes genéricos o configurables.
+
+## Convenciones de nombres
+
+- Usa identificadores en inglés.
+- Usa `PascalCase` para componentes.
+- Usa `camelCase` para funciones y variables.
+- Usa `UPPER_SNAKE_CASE` para constantes globales inmutables.
+
 ## Comandos
 
 - `npm run dev`: inicia el servidor de desarrollo.
