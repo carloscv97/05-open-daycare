@@ -1,8 +1,12 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Avatar } from './Avatar';
 
 const navigation = [
-  { label: 'Feed', icon: 'home', active: true },
-  { label: 'Niños', icon: 'children' },
+  { label: 'Feed', icon: 'home', href: '/' },
+  { label: 'Niños', icon: 'children', href: '/kids' },
   { label: 'Avisos', icon: 'bell' },
   { label: 'Mi cuenta', icon: 'user' },
 ];
@@ -34,6 +38,8 @@ function NavigationIcon({ icon }: { icon: string }) {
 }
 
 export function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-border bg-surface px-4 py-6 lg:flex">
       <div className="flex items-center gap-[11px] px-2 pb-[22px] pt-1">
@@ -76,12 +82,10 @@ export function Sidebar() {
         Nueva publicación
       </button>
       <nav className="flex flex-1 flex-col gap-1" aria-label="Navegación principal">
-        {navigation.map(item => (
-          <button
-            key={item.label}
-            type="button"
-            className={`flex items-center gap-3 rounded-xl px-3 py-[11px] text-left text-[14.5px] ${item.active ? 'bg-coral-soft font-extrabold text-coral-dark' : 'font-semibold text-[#6e6359]'}`}
-          >
+        {navigation.map((item) => {
+          const active = item.href === '/' ? pathname === '/' : item.href === '/kids' && pathname.startsWith('/kids');
+          const className = `flex items-center gap-3 rounded-xl px-3 py-[11px] text-left text-[14.5px] ${active ? 'bg-coral-soft font-extrabold text-coral-dark' : 'font-semibold text-[#6e6359]'}`;
+          const content = <>
             <svg
               aria-hidden="true"
               className="h-[19px] w-[19px]"
@@ -95,8 +99,10 @@ export function Sidebar() {
               <NavigationIcon icon={item.icon} />
             </svg>
             {item.label}
-          </button>
-        ))}
+          </>;
+
+          return item.href ? <Link key={item.label} href={item.href} className={className}>{content}</Link> : <button key={item.label} type="button" className={className}>{content}</button>;
+        })}
       </nav>
       <div className="mt-2.5 border-t border-border pt-3.5">
         <div className="flex items-center gap-[11px] px-2 py-1.5">

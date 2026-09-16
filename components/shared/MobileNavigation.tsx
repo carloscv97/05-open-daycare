@@ -1,6 +1,11 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 const items = [
-  { label: "Feed", icon: "home" },
-  { label: "Niños", icon: "children" },
+  { label: "Feed", icon: "home", href: "/" },
+  { label: "Niños", icon: "children", href: "/kids" },
   { label: "Avisos", icon: "bell" },
   { label: "Cuenta", icon: "user" },
 ];
@@ -13,16 +18,22 @@ function NavigationIcon({ icon }: { icon: string }) {
 }
 
 export function MobileNavigation() {
+  const pathname = usePathname();
+
   return (
     <nav className="fixed inset-x-0 bottom-0 z-10 flex h-16 items-center justify-around border-t border-border bg-surface px-4 lg:hidden" aria-label="Navegación móvil">
-      {items.map((item) => (
-        <button key={item.label} type="button" className={`flex min-w-12 flex-col items-center gap-0.5 text-xs font-extrabold ${item.label === "Feed" ? "text-coral-dark" : "text-text-muted"}`}>
+      {items.map((item) => {
+        const active = item.href === "/" ? pathname === "/" : item.href === "/kids" && pathname.startsWith("/kids");
+        const className = `flex min-w-12 flex-col items-center gap-0.5 text-xs font-extrabold ${active ? "text-coral-dark" : "text-text-muted"}`;
+        const content = <>
           <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <NavigationIcon icon={item.icon} />
           </svg>
           {item.label}
-        </button>
-      ))}
+        </>;
+
+        return item.href ? <Link key={item.label} href={item.href} className={className}>{content}</Link> : <button key={item.label} type="button" className={className}>{content}</button>;
+      })}
     </nav>
   );
 }
