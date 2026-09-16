@@ -57,3 +57,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Para funcionalidades o cambios de alcance amplio, usa la skill `/spec` para crear y aprobar una especificación antes de escribir código.
 - Una vez aprobada la especificación, usa la skill `/spec-impl` para implementar sus pasos.
+
+## Verificación de specs
+
+- Para comprobar una especificación implementada frente a sus criterios de aceptación, usa el agente `@spec-verifier` con la ruta del archivo de spec.
+- El agente debe verificar todos los criterios, aplicar correcciones mínimas si son necesarias y reportar los bloqueos pendientes.

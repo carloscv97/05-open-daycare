@@ -49,15 +49,15 @@ Esta funcionalidad no introduce ni modifica estructuras de datos. Reutiliza `Fee
 
 ## Criterios de aceptación
 
-- [ ] No existe ningún componente de la implementación del feed dentro de `components/feed/`.
-- [ ] `components/home/` contiene exactamente `FeedComposer.tsx`, `FeedPostCard.tsx` y `PostTypeBadge.tsx` de esta pantalla.
-- [ ] `components/shared/` contiene exactamente `Sidebar.tsx`, `MobileNavigation.tsx`, `Avatar.tsx` y `CreatePostButton.tsx` de esta pantalla.
-- [ ] `app/page.tsx` importa los componentes desde las nuevas rutas.
-- [ ] Las dependencias entre componentes resuelven desde sus nuevas rutas sin imports que apunten a `components/feed/`.
-- [ ] La ruta `/` mantiene las tres publicaciones de `feedPosts`, la sidebar de escritorio, la navegación inferior y el botón flotante de móvil.
-- [ ] `AGENTS.md` exige identificadores en inglés y distingue `PascalCase` para componentes, `camelCase` para funciones y variables, y `UPPER_SNAKE_CASE` para constantes globales inmutables.
-- [ ] `AGENTS.md` define que los componentes específicos viven en `components/<dominio>/` y que `components/shared/` exige reutilización real entre dominios.
-- [ ] No se ejecuta ningún script de npm durante la implementación.
+- [x] No existe ningún componente de la implementación del feed dentro de `components/feed/`.
+- [x] `components/home/` contiene exactamente `FeedComposer.tsx`, `FeedPostCard.tsx` y `PostTypeBadge.tsx` de esta pantalla.
+- [x] `components/shared/` contiene exactamente `Sidebar.tsx`, `MobileNavigation.tsx`, `Avatar.tsx` y `CreatePostButton.tsx` de esta pantalla.
+- [x] `app/page.tsx` importa los componentes desde las nuevas rutas.
+- [x] Las dependencias entre componentes resuelven desde sus nuevas rutas sin imports que apunten a `components/feed/`.
+- [x] La ruta `/` mantiene las tres publicaciones de `feedPosts`, la sidebar de escritorio, la navegación inferior y el botón flotante de móvil.
+- [x] `AGENTS.md` exige identificadores en inglés y distingue `PascalCase` para componentes, `camelCase` para funciones y variables, y `UPPER_SNAKE_CASE` para constantes globales inmutables.
+- [x] `AGENTS.md` define que los componentes específicos viven en `components/<dominio>/` y que `components/shared/` exige reutilización real entre dominios.
+- [x] No se ejecuta ningún script de npm durante la implementación.
 
 ## Decisiones
 
