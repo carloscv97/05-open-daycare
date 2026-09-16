@@ -1,8 +1,8 @@
 import { FeedComposer } from "@/components/home/FeedComposer";
 import { FeedPostCard } from "@/components/home/FeedPostCard";
-import { CreatePostButton } from "@/components/feed/CreatePostButton";
-import { MobileNavigation } from "@/components/feed/MobileNavigation";
-import { Sidebar } from "@/components/feed/Sidebar";
+import { CreatePostButton } from "@/components/shared/CreatePostButton";
+import { MobileNavigation } from "@/components/shared/MobileNavigation";
+import { Sidebar } from "@/components/shared/Sidebar";
 import { feedPosts } from "@/lib/mock-feed";
 
 export default function Home() {
