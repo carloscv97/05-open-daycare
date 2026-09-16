@@ -17,7 +17,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <p className="relative text-sm text-white/[0.9]">Guardería Sala Soles</p>
+        <p className="relative text-sm text-white/[0.9]">🌿 Guardería Sala Soles</p>
       </section>
 
       <section className="flex items-center justify-center px-5 py-10 sm:px-10">

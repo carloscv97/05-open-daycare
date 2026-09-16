@@ -54,16 +54,16 @@ Esta funcionalidad no introduce ni modifica estructuras de datos. Los datos de i
 
 ## Criterios de aceptación
 
-- [ ] `/login` reproduce la composición de `login.dc.html` en escritorio, salvo por la ausencia de las opciones Personal y Familia.
-- [ ] `/login` muestra campos editables de email y contraseña, la acción visual de recuperación y un enlace a `/activate-account`.
-- [ ] En móvil, `/login` no muestra el panel coral ilustrativo y el formulario permanece visible y utilizable.
-- [ ] Enviar el formulario de `/login` navega a `/` sin requerir validación ni autenticación.
-- [ ] `/activate-account` muestra el código `7K4P9`, el email `lucia.fernandez@gmail.com` y la invitación para Mateo de Sala Soles.
-- [ ] Los campos de código, email y contraseña de `/activate-account` son editables y sus cambios no persisten tras recargar.
-- [ ] La autorización de fotos de `/activate-account` inicia activa, puede alternarse y no impide enviar el formulario.
-- [ ] El enlace de `/activate-account` navega a `/login` y el envío de su formulario navega a `/`.
-- [ ] `/activate-account` se muestra centrada en una única columna utilizable en escritorio y móvil.
-- [ ] `npm run build` finaliza correctamente.
+- [x] `/login` reproduce la composición de `login.dc.html` en escritorio, salvo por la ausencia de las opciones Personal y Familia. (Verificado en Playwright a 1440×900: `.playwright-mcp/login-desktop-verified.png` y `.yml`.)
+- [x] `/login` muestra campos editables de email y contraseña, la acción visual de recuperación y un enlace a `/activate-account`. (Verificado mediante edición de ambos campos y navegación del enlace con Playwright.)
+- [x] En móvil, `/login` no muestra el panel coral ilustrativo y el formulario permanece visible y utilizable. (Verificado a 390×844 en `.playwright-mcp/login-mobile-after-navigation.yml`.)
+- [x] Enviar el formulario de `/login` navega a `/` sin requerir validación ni autenticación. (Playwright envió el formulario y confirmó la URL `/`.)
+- [x] `/activate-account` muestra el código `7K4P9`, el email `lucia.fernandez@gmail.com` y la invitación para Mateo de Sala Soles. (Verificado en `.playwright-mcp/activate-account-mobile.yml` y `.playwright-mcp/activate-account-desktop.yml`.)
+- [x] Los campos de código, email y contraseña de `/activate-account` son editables y sus cambios no persisten tras recargar. (Playwright editó los tres campos y, tras recargar, confirmó sus valores iniciales en `.playwright-mcp/activate-account-reload-reset.yml`.)
+- [x] La autorización de fotos de `/activate-account` inicia activa, puede alternarse y no impide enviar el formulario. (Playwright confirmó el estado inicial, la desactivó y envió correctamente el formulario a `/`.)
+- [x] El enlace de `/activate-account` navega a `/login` y el envío de su formulario navega a `/`. (Playwright verificó ambos destinos.)
+- [x] `/activate-account` se muestra centrada en una única columna utilizable en escritorio y móvil. (Verificado a 1440×900 y 390×844 en los artefactos de Playwright.)
+- [x] `npm run build` finaliza correctamente. (Verificado el 2026-09-16.)
 
 ## Decisiones
 
