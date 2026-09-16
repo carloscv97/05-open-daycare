@@ -1,6 +1,6 @@
 import type { FeedPost } from "@/lib/mock-feed";
 
-import { Avatar } from "./Avatar";
+import { Avatar } from "@/components/shared/Avatar";
 import { PostTypeBadge } from "./PostTypeBadge";
 
 export function FeedPostCard({ post }: { post: FeedPost }) {

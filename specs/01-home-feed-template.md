@@ -1,6 +1,6 @@
 # SPEC 01 — Home con plantilla de feed
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** Ninguna
 > **Fecha:** 2026-09-15
 > **Objetivo:** Reemplazar la ruta `/` por una reproducción visual estática, modular y adaptativa del feed proporcionado de OpenDayCare.

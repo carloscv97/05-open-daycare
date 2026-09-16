@@ -1,6 +1,6 @@
+import { FeedComposer } from "@/components/home/FeedComposer";
+import { FeedPostCard } from "@/components/home/FeedPostCard";
 import { CreatePostButton } from "@/components/feed/CreatePostButton";
-import { FeedComposer } from "@/components/feed/FeedComposer";
-import { FeedPostCard } from "@/components/feed/FeedPostCard";
 import { MobileNavigation } from "@/components/feed/MobileNavigation";
 import { Sidebar } from "@/components/feed/Sidebar";
 import { feedPosts } from "@/lib/mock-feed";

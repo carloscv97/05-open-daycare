@@ -1,4 +1,4 @@
-import { Avatar } from "./Avatar";
+import { Avatar } from "@/components/shared/Avatar";
 
 export function FeedComposer() {
   return (

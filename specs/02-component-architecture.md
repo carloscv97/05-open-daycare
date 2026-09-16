@@ -1,7 +1,7 @@
 # SPEC 02 — Arquitectura de componentes
 
-> **Estado:** Draft
-> **Depende de:** SPEC 01
+> **Estado:** Approved
+> **Depende de:** spe
 > **Fecha:** 2026-09-15
 > **Objetivo:** Reorganizar los componentes existentes por dominio y compartidos, y documentar convenciones de arquitectura y nombres para OpenDayCare.
 
@@ -71,11 +71,11 @@ Esta funcionalidad no introduce ni modifica estructuras de datos. Reutiliza `Fee
 
 ## Riesgos
 
-| Riesgo | Mitigación |
-| --- | --- |
-| Un movimiento deja una importación relativa obsoleta | Actualizar todas las importaciones afectadas dentro del mismo paso y revisarlas manualmente. |
+| Riesgo                                                                     | Mitigación                                                                                                                |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Un movimiento deja una importación relativa obsoleta                       | Actualizar todas las importaciones afectadas dentro del mismo paso y revisarlas manualmente.                              |
 | Un componente se promueve a compartido antes de ser realmente reutilizable | Mantener su API y branding actuales; la generalización se hará en una spec posterior cuando exista un segundo consumidor. |
-| La nueva estructura se use de forma inconsistente | Registrar las reglas concretas en `AGENTS.md`. |
+| La nueva estructura se use de forma inconsistente                          | Registrar las reglas concretas en `AGENTS.md`.                                                                            |
 
 ## Qué no incluye esta spec
 
