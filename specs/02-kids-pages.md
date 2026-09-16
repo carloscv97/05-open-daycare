@@ -1,6 +1,6 @@
 # SPEC 02 — Pantallas de niños
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** SPEC 01
 > **Fecha:** 2026-09-16
 > **Objetivo:** Crear las rutas `/kids` y `/kids/[slug]` con datos mock centralizados, reproduciendo las referencias de listado y perfil de niños.
