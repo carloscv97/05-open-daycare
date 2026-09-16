@@ -64,16 +64,16 @@ Los ocho registros conservarán los nombres, edades, estados de padres y alertas
 
 ## Criterios de aceptación
 
-- [ ] La ruta `/kids` muestra exactamente las ocho tarjetas de niños de la referencia.
-- [ ] Las tarjetas enlazan respectivamente a los ocho slugs acordados bajo `/kids/`.
-- [ ] El campo Buscar niño se muestra y no modifica las tarjetas al escribir.
-- [ ] Cada slug válido muestra el nombre, edad, sala, fechas, padres y alertas del registro mock correspondiente.
-- [ ] Un perfil sin `alertNote` muestra un estado vacío de alergias y notas.
-- [ ] Una visita a `/kids/un-slug-inexistente` muestra la página 404.
-- [ ] Sidebar y navegación móvil enlazan a `/kids` y marcan Niños como activo en `/kids` y `/kids/[slug]`.
-- [ ] Las acciones Editar, Resumen del día, Vincular otro padre y Agregar niño permanecen como interfaz sin rutas ni flujos implementados.
-- [ ] Las rutas `/kids` y `/kids/[slug]` son utilizables en escritorio y móvil.
-- [ ] `npm run build` finaliza correctamente.
+- [x] La ruta `/kids` muestra exactamente las ocho tarjetas de niños de la referencia.
+- [x] Las tarjetas enlazan respectivamente a los ocho slugs acordados bajo `/kids/`.
+- [x] El campo Buscar niño se muestra y no modifica las tarjetas al escribir.
+- [x] Cada slug válido muestra el nombre, edad, sala, fechas, padres y alertas del registro mock correspondiente.
+- [x] Un perfil sin `alertNote` muestra un estado vacío de alergias y notas.
+- [x] Una visita a `/kids/un-slug-inexistente` muestra la página 404.
+- [x] Sidebar y navegación móvil enlazan a `/kids` y marcan Niños como activo en `/kids` y `/kids/[slug]`.
+- [x] Las acciones Editar, Resumen del día, Vincular otro padre y Agregar niño permanecen como interfaz sin rutas ni flujos implementados.
+- [x] Las rutas `/kids` y `/kids/[slug]` son utilizables en escritorio y móvil.
+- [x] `npm run build` finaliza correctamente.
 
 ## Decisiones
 
