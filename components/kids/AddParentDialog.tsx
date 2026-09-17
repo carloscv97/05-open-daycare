@@ -8,6 +8,9 @@ const EMPTY_FORM_VALUES = {
   relation: "",
 };
 
+type FieldName = keyof typeof EMPTY_FORM_VALUES;
+type FormErrors = Partial<Record<FieldName, string>>;
+
 type AddParentDialogProps = {
   kidName: string;
 };
@@ -15,14 +18,36 @@ type AddParentDialogProps = {
 export function AddParentDialog({ kidName }: AddParentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [formValues, setFormValues] = useState(EMPTY_FORM_VALUES);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   function closeDialog() {
     setFormValues(EMPTY_FORM_VALUES);
+    setErrors({});
     setIsOpen(false);
   }
 
-  function updateField(field: keyof typeof EMPTY_FORM_VALUES, value: string) {
+  function updateField(field: FieldName, value: string) {
     setFormValues({ ...formValues, [field]: value });
+    setErrors((currentErrors) => {
+      const remainingErrors = { ...currentErrors };
+      delete remainingErrors[field];
+      return remainingErrors;
+    });
+  }
+
+  function handleSubmit() {
+    const nextErrors: FormErrors = {};
+
+    if (!formValues.parentName.trim()) nextErrors.parentName = "El nombre del padre o madre es obligatorio.";
+    if (!formValues.email.trim()) {
+      nextErrors.email = "El email es obligatorio.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formValues.email)) {
+      nextErrors.email = "Ingresá un email válido.";
+    }
+    if (!formValues.relation) nextErrors.relation = "Seleccioná un parentesco.";
+
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length === 0) closeDialog();
   }
 
   return (
@@ -50,9 +75,9 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
             </button>
           </header>
 
-          <form onSubmit={(event) => {
+          <form noValidate onSubmit={(event) => {
             event.preventDefault();
-            closeDialog();
+            handleSubmit();
           }} className="p-5 sm:p-[26px]">
             <div className="mb-5 flex gap-[11px] rounded-[14px] bg-[#e3ecfb] px-4 py-[13px]">
               <svg aria-hidden="true" className="mt-px h-5 w-5 shrink-0 text-[#4e72c8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,21 +89,24 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
 
             <label className="mb-[18px] block">
               <span className="mb-2 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">NOMBRE DEL PADRE/MADRE</span>
-              <input name="parentName" value={formValues.parentName} onChange={(event) => updateField("parentName", event.target.value)} placeholder="Ej. Diego Fernández" className="w-full rounded-[14px] border-[1.5px] border-[#eadfd0] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b]" />
+              <input name="parentName" value={formValues.parentName} onChange={(event) => updateField("parentName", event.target.value)} placeholder="Ej. Diego Fernández" aria-describedby={errors.parentName ? "parent-name-error" : undefined} aria-invalid={Boolean(errors.parentName)} className={`w-full rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b] ${errors.parentName ? "border-coral" : "border-[#eadfd0]"}`} />
+              {errors.parentName && <p id="parent-name-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.parentName}</p>}
             </label>
 
             <label className="mb-[18px] block">
               <span className="mb-2 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">EMAIL</span>
-              <input type="email" name="email" value={formValues.email} onChange={(event) => updateField("email", event.target.value)} placeholder="correo@ejemplo.com" className="w-full rounded-[14px] border-[1.5px] border-[#eadfd0] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b]" />
+              <input type="email" name="email" value={formValues.email} onChange={(event) => updateField("email", event.target.value)} placeholder="correo@ejemplo.com" aria-describedby={errors.email ? "email-error" : undefined} aria-invalid={Boolean(errors.email)} className={`w-full rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b] ${errors.email ? "border-coral" : "border-[#eadfd0]"}`} />
+              {errors.email && <p id="email-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.email}</p>}
             </label>
 
-            <fieldset className="mb-5">
+            <fieldset aria-describedby={errors.relation ? "relation-error" : undefined} className="mb-5">
               <legend className="mb-2.5 text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">PARENTESCO</legend>
               <div className="flex gap-[9px]">
                 <button type="button" onClick={() => updateField("relation", "mother")} aria-pressed={formValues.relation === "mother"} className={`flex-1 rounded-full border-[1.5px] py-[11px] text-[14px] font-extrabold ${formValues.relation === "mother" ? "border-[#9fb8ec] bg-[#ccd8f4] text-[#4e72c8]" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359]"}`}>Mamá</button>
                 <button type="button" onClick={() => updateField("relation", "father")} aria-pressed={formValues.relation === "father"} className={`flex-1 rounded-full border-[1.5px] py-[11px] text-[14px] font-extrabold ${formValues.relation === "father" ? "border-[#9fb8ec] bg-[#ccd8f4] text-[#4e72c8]" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359]"}`}>Papá</button>
                 <button type="button" onClick={() => updateField("relation", "guardian")} aria-pressed={formValues.relation === "guardian"} className={`flex-1 rounded-full border-[1.5px] py-[11px] text-[14px] font-extrabold ${formValues.relation === "guardian" ? "border-[#9fb8ec] bg-[#ccd8f4] text-[#4e72c8]" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359]"}`}>Tutor/a</button>
               </div>
+              {errors.relation && <p id="relation-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.relation}</p>}
             </fieldset>
 
             <div className="mb-5 rounded-[16px] border-[1.5px] border-dashed border-[#e6d08a] bg-[#fbf1d6] p-[18px] text-center">
