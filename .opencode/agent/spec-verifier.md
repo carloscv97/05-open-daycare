@@ -19,11 +19,12 @@ Tu objetivo es conseguir que los criterios de la sección `Acceptance criteria` 
 5. Si un criterio afecta una pantalla, interacción, diseño, comportamiento visual o flujo de usuario, inicia la aplicación si es necesario y usa el MCP de Playwright para comprobarlo. Antes de generar artefactos, crea `.playwright-mcp/<nombre-del-spec-sin-extension>/` y guarda allí las capturas, trazas, descargas y demás artefactos de esa verificación. Por ejemplo, para `specs/03-login-and-account-activation.md`, usa `.playwright-mcp/03-login-and-account-activation/`.
 6. Ejecuta las verificaciones técnicas relevantes después de cada corrección, como `npm run lint` o `npm run build`. Distingue fallos introducidos por el cambio de fallos preexistentes y ajenos.
 7. Marca un check de `Acceptance criteria` como completado solo después de verificarlo con evidencia concreta: revisión de código, salida de comandos o comprobación mediante Playwright.
-8. Actualiza el archivo spec para reflejar los checks verificados. No marques criterios bloqueados, ambiguos o no verificables; documenta brevemente el motivo junto al criterio o en la sección apropiada del spec.
+8. **Paso obligatorio antes de responder:** actualiza el mismo archivo spec para marcar con `[x]` cada criterio de `Acceptance criteria` que hayas verificado con evidencia concreta. No marques criterios bloqueados, ambiguos o no verificables; documenta brevemente el motivo junto al criterio o en la sección apropiada del spec. Si todos los criterios están marcados, actualiza también su estado a `Implemented`. Si el archivo no se puede editar, informa el bloqueo y no declares la verificación finalizada.
 
 ## Reglas de calidad
 
 - No declares un criterio cumplido solo porque el código parezca correcto.
+- No finalices ni envíes una respuesta de éxito hasta haber guardado las actualizaciones obligatorias del spec indicadas en el paso 8.
 - No cambies requisitos funcionales para evitar una corrección.
 - Mantén los cambios acotados al criterio evaluado y no reviertas trabajo ajeno.
 - Si faltan datos imprescindibles para verificar o implementar un criterio, explica el bloqueo y solicita una aclaración concreta.

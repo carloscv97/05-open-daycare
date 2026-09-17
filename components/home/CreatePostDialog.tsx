@@ -134,7 +134,7 @@ export function CreatePostDialog({ isOpen, onClose, triggerRef }: CreatePostDial
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6" onMouseDown={(event) => {
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6" onClick={(event) => {
       if (event.target === event.currentTarget) closeDialog();
     }}>
       <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="create-post-title" className="max-h-full w-full max-w-[580px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">

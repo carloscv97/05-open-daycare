@@ -1,6 +1,6 @@
 # SPEC 06 — Diálogo para crear publicación
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** Ninguno
 > **Fecha:** 2026-09-16
 > **Objetivo:** Añadir un diálogo modal de nueva publicación desde el sidebar y el botón flotante para capturar y validar una publicación sin persistirla ni modificar el feed.
@@ -48,20 +48,20 @@ Esta funcionalidad no introduce estructuras persistentes. `components/home/Creat
 
 ## Criterios de aceptación
 
-- [ ] Pulsar `Nueva publicación` en el sidebar abre el diálogo en escritorio.
-- [ ] Pulsar el botón flotante abre el mismo diálogo en móvil.
-- [ ] El diálogo reproduce los destinatarios, tipos, descripción y sección de fotos de la referencia.
-- [ ] El formulario inicia sin destinatarios, tipo ni descripción seleccionados o escritos.
-- [ ] Se pueden seleccionar varios niños a la vez.
-- [ ] Elegir `Toda la sala` elimina las selecciones individuales, y elegir un niño elimina `Toda la sala`.
-- [ ] El selector muestra Comida, Siesta, Actividad, Logro, Ánimo, Foto y Anuncio y permite seleccionar solo uno.
-- [ ] Publicar sin destinatario, tipo o descripción muestra un error bajo cada control faltante y mantiene abierto el diálogo.
-- [ ] Publicar con valores válidos cierra y limpia el formulario sin añadir ni cambiar publicaciones del feed.
-- [ ] El control `Agregar` de fotos es visible pero no abre un selector de archivos ni modifica el formulario.
-- [ ] Cancelar, clic sobre el fondo y Escape cierran el diálogo y descartan los valores escritos.
-- [ ] Al abrir, el foco se sitúa en la descripción; al cerrar, vuelve exactamente al botón del sidebar o flotante que abrió el diálogo.
-- [ ] El fondo no se puede interactuar y el foco no puede escapar del diálogo mientras este esté abierto.
-- [ ] `npx eslint app/page.tsx components/home/CreatePostDialog.tsx components/shared/Sidebar.tsx components/shared/CreatePostButton.tsx` finaliza sin errores.
+- [x] Pulsar `Nueva publicación` en el sidebar abre el diálogo en escritorio.
+- [x] Pulsar el botón flotante abre el mismo diálogo en móvil.
+- [x] El diálogo reproduce los destinatarios, tipos, descripción y sección de fotos de la referencia.
+- [x] El formulario inicia sin destinatarios, tipo ni descripción seleccionados o escritos.
+- [x] Se pueden seleccionar varios niños a la vez.
+- [x] Elegir `Toda la sala` elimina las selecciones individuales, y elegir un niño elimina `Toda la sala`.
+- [x] El selector muestra Comida, Siesta, Actividad, Logro, Ánimo, Foto y Anuncio y permite seleccionar solo uno.
+- [x] Publicar sin destinatario, tipo o descripción muestra un error bajo cada control faltante y mantiene abierto el diálogo.
+- [x] Publicar con valores válidos cierra y limpia el formulario sin añadir ni cambiar publicaciones del feed.
+- [x] El control `Agregar` de fotos es visible pero no abre un selector de archivos ni modifica el formulario.
+- [x] Cancelar, clic sobre el fondo y Escape cierran el diálogo y descartan los valores escritos.
+- [x] Al abrir, el foco se sitúa en la descripción; al cerrar, vuelve exactamente al botón del sidebar o flotante que abrió el diálogo.
+- [x] El fondo no se puede interactuar y el foco no puede escapar del diálogo mientras este esté abierto.
+- [x] `npx eslint app/page.tsx components/home/CreatePostDialog.tsx components/shared/Sidebar.tsx components/shared/CreatePostButton.tsx` finaliza sin errores.
 
 ## Decisiones
 
