@@ -49,7 +49,7 @@ export default async function KidProfilePage({ params }: { params: Promise<{ slu
                 </svg>
                 Resumen del día
               </button>
-              <LinkedParents parents={kid.parents} />
+              <LinkedParents kidName={kid.name} parents={kid.parents} />
             </aside>
           </div>
         </div>
