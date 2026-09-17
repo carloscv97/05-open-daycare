@@ -1,6 +1,6 @@
 # SPEC 04 — Diálogo para agregar niño
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** Ninguno
 > **Fecha:** 2026-09-16
 > **Objetivo:** Añadir un diálogo modal visual desde `/kids` para capturar y validar los datos básicos de un niño sin persistirlos ni modificar el listado.
@@ -43,16 +43,18 @@ Esta funcionalidad no introduce estructuras persistentes. `components/kids/AddKi
 
 ## Criterios de aceptación
 
-- [ ] Pulsar Agregar niño abre el diálogo.
-- [ ] El diálogo muestra los cinco campos y los cuatro placeholders solicitados exactamente.
-- [ ] El selector de Sala permite elegir Soles, Lunas y Estrellas.
-- [ ] Guardar con Nombre completo, Fecha de nacimiento o Sala vacíos muestra un error bajo cada campo faltante.
-- [ ] Una fecha con formato inválido o inexistente muestra un error y no cierra el diálogo al guardar.
-- [ ] Guardar valores válidos cierra y limpia el formulario sin cambiar las ocho tarjetas existentes.
-- [ ] Cancelar, clic sobre el fondo y Escape cierran el diálogo y descartan los valores escritos.
-- [ ] Al abrir, el foco se sitúa en Nombre completo; al cerrar, vuelve al botón Agregar niño.
-- [ ] El fondo no se puede interactuar mientras el diálogo está abierto.
-- [ ] El diálogo es utilizable en escritorio y móvil.
+- [x] Pulsar Agregar niño abre el diálogo.
+- [x] El diálogo muestra los cinco campos y los cuatro placeholders solicitados exactamente.
+- [x] El selector de Sala permite elegir Soles, Lunas y Estrellas.
+- [x] Guardar con Nombre completo, Fecha de nacimiento o Sala vacíos muestra un error bajo cada campo faltante.
+- [x] Una fecha con formato inválido o inexistente muestra un error y no cierra el diálogo al guardar.
+- [x] Guardar valores válidos cierra y limpia el formulario sin cambiar las ocho tarjetas existentes.
+- [x] Cancelar, clic sobre el fondo y Escape cierran el diálogo y descartan los valores escritos.
+- [x] Al abrir, el foco se sitúa en Nombre completo; al cerrar, vuelve al botón Agregar niño.
+- [x] El fondo no se puede interactuar mientras el diálogo está abierto.
+- [x] El diálogo es utilizable en escritorio y móvil.
+
+> **Verificado el 2026-09-16:** comprobación manual con Playwright en `/kids` (móvil 375×667 y escritorio 1280×800), incluida la validación, restauración de valores/foco y los cierres. Artefactos: `.playwright-mcp/04-add-kid-dialog/`.
 
 ## Decisiones
 

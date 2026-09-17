@@ -33,7 +33,7 @@ export function AddKidDialog() {
   const [errors, setErrors] = useState<FormErrors>({});
   const dialogRef = useRef<HTMLElement>(null);
   const fullNameInputRef = useRef<HTMLInputElement>(null);
-  const triggerRef = useRef<HTMLElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const hasOpenedRef = useRef(false);
 
   function closeDialog() {
