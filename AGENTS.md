@@ -20,6 +20,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - `npm run dev` starts the development server. `npm run build` is the production build and the available type-checking verification; no test suite or standalone typecheck script exists.
 - `npm run lint` runs ESLint across the repository and currently fails on two pre-existing errors in `references/pantallas/support.js`. Do not attribute those reference-file failures to application changes.
+- After verifying a spec, update its acceptance-criteria checklist to reflect the results. When every criterion passes, update its state to `Implemented`; do not mark unmet criteria as complete.
+
+## Database Migrations And Specs
+
+- Make every persistent Supabase schema or seed-data change through a named migration. Do not leave direct database changes without a migration artifact.
+- Keep each applied remote migration in `supabase/migrations/`, using the remote migration version and the exact SQL that was applied.
 
 ## UI Expectations
 
