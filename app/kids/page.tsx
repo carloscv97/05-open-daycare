@@ -1,3 +1,4 @@
+import { AddKidDialog } from "@/components/kids/AddKidDialog";
 import { KidCard } from "@/components/kids/KidCard";
 import { MobileNavigation } from "@/components/shared/MobileNavigation";
 import { Sidebar } from "@/components/shared/Sidebar";
@@ -14,13 +15,7 @@ export default function KidsPage() {
               <p className="mb-1 text-[12.5px] font-extrabold tracking-[0.8px] text-coral-dark">GESTIÓN</p>
               <h1 className="font-display text-3xl font-semibold text-text">Niños</h1>
             </div>
-            <button type="button" className="flex shrink-0 items-center gap-2 rounded-[14px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-[18px] py-[11px] text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)]">
-              <svg aria-hidden="true" className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              <span className="hidden sm:inline">Agregar niño</span>
-              <span className="sm:hidden">Agregar</span>
-            </button>
+            <AddKidDialog />
           </header>
 
           <div className="mb-[22px] flex items-center gap-[11px] rounded-[14px] border border-border bg-surface px-4 py-3">
