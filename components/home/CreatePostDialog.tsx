@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type RefObject } from "react";
+import { z } from "zod";
 
 type CreatePostDialogProps = {
   isOpen: boolean;
@@ -26,20 +27,38 @@ const POST_TYPES = [
 
 type RecipientId = (typeof RECIPIENTS)[number]["id"];
 type PostType = (typeof POST_TYPES)[number]["id"];
+type FormErrors = Partial<Record<"recipients" | "postType" | "description", string>>;
+
+const createPostSchema = z.object({
+  recipients: z.array(z.enum(["mateo", "sofia", "benjamin"])).min(1, "Seleccioná al menos un destinatario.").or(z.literal("room")),
+  postType: z.enum(["food", "nap", "activity", "achievement", "mood", "photo", "announcement"]).nullable().refine((value) => value !== null, "Seleccioná un tipo de publicación."),
+  description: z.string().trim().min(1, "Escribí una descripción."),
+});
 
 export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
   const [recipients, setRecipients] = useState<RecipientId[] | "room">([]);
   const [postType, setPostType] = useState<PostType | null>(null);
   const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
 
   function closeDialog() {
     setRecipients([]);
     setPostType(null);
     setDescription("");
+    setErrors({});
     onClose();
   }
 
+  function clearError(field: keyof FormErrors) {
+    setErrors((currentErrors) => {
+      const remainingErrors = { ...currentErrors };
+      delete remainingErrors[field];
+      return remainingErrors;
+    });
+  }
+
   function toggleRecipient(recipientId: RecipientId) {
+    clearError("recipients");
     setRecipients((currentRecipients) => {
       if (currentRecipients === "room") return [recipientId];
 
@@ -47,6 +66,22 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
         ? currentRecipients.filter((id) => id !== recipientId)
         : [...currentRecipients, recipientId];
     });
+  }
+
+  function handleSubmit() {
+    const result = createPostSchema.safeParse({ recipients, postType, description });
+
+    if (!result.success) {
+      const fieldErrors = z.flattenError(result.error).fieldErrors;
+      setErrors({
+        recipients: fieldErrors.recipients?.[0],
+        postType: fieldErrors.postType?.[0],
+        description: fieldErrors.description?.[0],
+      });
+      return;
+    }
+
+    closeDialog();
   }
 
   if (!isOpen) return null;
@@ -59,41 +94,56 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
             Cancelar
           </button>
           <h2 className="font-display text-[18px] font-semibold text-text">Nueva publicación</h2>
-          <button type="button" className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-extrabold text-coral-dark transition hover:bg-[#fff0eb] hover:text-[#a94230] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
+          <button type="submit" form="create-post-form" className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-extrabold text-coral-dark transition hover:bg-[#fff0eb] hover:text-[#a94230] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
             Publicar
           </button>
         </header>
 
-        <div className="p-5 sm:p-[26px]">
+        <form id="create-post-form" onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit();
+        }} className="p-5 sm:p-[26px]">
           <fieldset className="mb-[22px]">
             <legend className="mb-2.5 text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">PARA</legend>
-            <div className="flex flex-wrap gap-[9px]">
+            <div className="flex flex-wrap gap-[9px]" aria-describedby={errors.recipients ? "recipients-error" : undefined}>
               {RECIPIENTS.map((recipient) => (
                 <button key={recipient.id} type="button" onClick={() => toggleRecipient(recipient.id)} aria-pressed={Array.isArray(recipients) && recipients.includes(recipient.id)} className={`flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] py-1 pl-1 pr-3.5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${Array.isArray(recipients) && recipients.includes(recipient.id) ? "border-[#3f362e] bg-[#3f362e] text-white" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359] hover:border-[#cbb89f]"}`}>
                   <span className={`flex h-[26px] w-[26px] items-center justify-center rounded-full font-display text-[13px] font-semibold ${recipient.avatarClassName}`}>{recipient.initial}</span>
                   {recipient.label}
                 </button>
               ))}
-              <button type="button" onClick={() => setRecipients("room")} aria-pressed={recipients === "room"} className={`cursor-pointer rounded-full border-[1.5px] px-4 py-1.5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${recipients === "room" ? "border-[#3f362e] bg-[#3f362e] text-white" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359] hover:border-[#cbb89f]"}`}>
+              <button type="button" onClick={() => {
+                clearError("recipients");
+                setRecipients("room");
+              }} aria-pressed={recipients === "room"} className={`cursor-pointer rounded-full border-[1.5px] px-4 py-1.5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${recipients === "room" ? "border-[#3f362e] bg-[#3f362e] text-white" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359] hover:border-[#cbb89f]"}`}>
                 Toda la sala
               </button>
             </div>
+            {errors.recipients && <p id="recipients-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.recipients}</p>}
           </fieldset>
 
           <fieldset className="mb-[22px]">
             <legend className="mb-2.5 text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">TIPO</legend>
-            <div className="flex flex-wrap gap-[9px]">
+            <div className="flex flex-wrap gap-[9px]" aria-describedby={errors.postType ? "post-type-error" : undefined}>
               {POST_TYPES.map((typeOption) => (
-                <button key={typeOption.id} type="button" onClick={() => setPostType(typeOption.id)} aria-pressed={typeOption.id === postType} className={`cursor-pointer rounded-full px-4 py-2 text-[13.5px] font-extrabold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${typeOption.id === postType ? "ring-2 ring-[#3f362e] ring-offset-2" : ""} ${typeOption.className}`}>
+                <button key={typeOption.id} type="button" onClick={() => {
+                  clearError("postType");
+                  setPostType(typeOption.id);
+                }} aria-pressed={typeOption.id === postType} className={`cursor-pointer rounded-full px-4 py-2 text-[13.5px] font-extrabold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${typeOption.id === postType ? "ring-2 ring-[#3f362e] ring-offset-2" : ""} ${typeOption.className}`}>
                   {typeOption.label}
                 </button>
               ))}
             </div>
+            {errors.postType && <p id="post-type-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.postType}</p>}
           </fieldset>
 
           <label className="mb-[22px] block">
             <span className="mb-2.5 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">DESCRIPCIÓN</span>
-            <textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Contá cómo le fue hoy…" className="min-h-[120px] w-full resize-y rounded-[14px] border-[1.5px] border-[#eadfd0] bg-white px-4 py-[13px] text-[15px] leading-[1.5] text-text outline-none placeholder:text-[#b6a99b] focus:border-[#cbb89f]" />
+            <textarea value={description} onChange={(event) => {
+              clearError("description");
+              setDescription(event.target.value);
+            }} placeholder="Contá cómo le fue hoy…" aria-describedby={errors.description ? "description-error" : undefined} aria-invalid={Boolean(errors.description)} className={`min-h-[120px] w-full resize-y rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] leading-[1.5] text-text outline-none placeholder:text-[#b6a99b] focus:border-[#cbb89f] ${errors.description ? "border-coral" : "border-[#eadfd0]"}`} />
+            {errors.description && <p id="description-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.description}</p>}
           </label>
 
           <section aria-labelledby="photos-heading">
@@ -114,7 +164,7 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
               </button>
             </div>
           </section>
-        </div>
+        </form>
       </section>
     </div>
   );

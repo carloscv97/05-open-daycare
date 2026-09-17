@@ -15,7 +15,7 @@
 - Permitir seleccionar varios niños y hacer que `Toda la sala` sea exclusiva frente a cualquier selección individual.
 - Mostrar los tipos Comida, Siesta, Actividad, Logro, Ánimo, Foto y Anuncio.
 - Iniciar sin destinatario ni tipo seleccionados y con la descripción vacía, usando el placeholder `Contá cómo le fue hoy…`.
-- Exigir al menos un destinatario, un tipo y una descripción no vacía antes de publicar.
+- Exigir mediante Zod al menos un destinatario, un tipo y una descripción no vacía antes de publicar.
 - Mostrar errores de validación sin descartar los valores válidos o inválidos que el usuario haya introducido.
 - Mostrar la sección FOTOS y el control visual `Agregar`, sin abrir el selector de archivos ni almacenar imágenes.
 - Cerrar y restablecer el formulario al publicar valores válidos, sin añadir una tarjeta al feed ni guardar datos.
@@ -40,7 +40,7 @@ Esta funcionalidad no introduce estructuras persistentes. `components/home/Creat
 
 1. Crear `components/home/CreatePostDialog.tsx` como componente cliente que reciba `isOpen`, `onClose` y el activador que debe recuperar el foco; implementar la estructura visual responsive de la referencia, incluidos encabezado, destinatarios, tipos, descripción y fotos visuales.
 2. Añadir el estado local del formulario en `CreatePostDialog`, con selección múltiple de niños, exclusividad de `Toda la sala`, selección única de tipo, texto descriptivo y restablecimiento al cerrar.
-3. Implementar la validación de destinatario, tipo y descripción, con mensajes de error bajo los controles inválidos y conservación de los valores escritos.
+3. Implementar con Zod la validación de destinatario, tipo y descripción, con mensajes de error bajo los controles inválidos y conservación de los valores escritos.
 4. Añadir la semántica modal y los comportamientos de foco: descripción enfocada al abrir, retención con Tab, cierre por Escape y fondo, bloqueo del desplazamiento de fondo y retorno al activador correspondiente.
 5. Actualizar `components/shared/Sidebar.tsx` y `components/shared/CreatePostButton.tsx` para aceptar y ejecutar un callback de apertura, conservando su composición visual y añadiendo estados interactivos de cursor, hover y foco visible.
 6. Actualizar `app/page.tsx` para conservar el estado de apertura, conectar ambos activadores al mismo diálogo y registrar cuál debe recuperar el foco al cerrarse.
@@ -68,6 +68,7 @@ Esta funcionalidad no introduce estructuras persistentes. `components/home/Creat
 - **Sí:** formulario visual sin publicación real. Mantiene el alcance del prototipo y no inventa una fuente de datos.
 - **Sí:** los dos activadores existentes abren un único diálogo coordinado desde la página principal. Evita dos implementaciones de formulario y preserva el foco correcto.
 - **Sí:** destinatarios, tipo y descripción obligatorios. Una publicación visual debe definir a quién se dirige, su categoría y su contenido.
+- **Sí:** validación local con Zod. Mantiene un esquema declarativo y consistente con los formularios existentes.
 - **Sí:** selección múltiple de niños con `Toda la sala` exclusiva. Refleja que una misma publicación puede dirigirse a varias familias sin ambigüedad sobre la sala completa.
 - **Sí:** los siete tipos de la referencia. Conserva el alcance visual definido sin limitarlo a los tres tipos actuales del feed mock.
 - **Sí:** formulario inicialmente vacío. Exige una decisión explícita y evita publicar por accidente el contenido de ejemplo.
