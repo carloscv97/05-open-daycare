@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const EMPTY_FORM_VALUES = {
   parentName: "",
@@ -19,6 +19,10 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [formValues, setFormValues] = useState(EMPTY_FORM_VALUES);
   const [errors, setErrors] = useState<FormErrors>({});
+  const dialogRef = useRef<HTMLElement>(null);
+  const parentNameInputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const hasOpenedRef = useRef(false);
 
   function closeDialog() {
     setFormValues(EMPTY_FORM_VALUES);
@@ -50,9 +54,54 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
     if (Object.keys(nextErrors).length === 0) closeDialog();
   }
 
+  function openDialog() {
+    hasOpenedRef.current = true;
+    setIsOpen(true);
+  }
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (hasOpenedRef.current) triggerRef.current?.focus();
+      return;
+    }
+
+    const previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    parentNameInputRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        closeDialog();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusableElements = dialogRef.current?.querySelectorAll<HTMLElement>("button, input, select, textarea, [tabindex]:not([tabindex='-1'])");
+      if (!focusableElements?.length) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
   return (
     <>
-      <button type="button" onClick={() => setIsOpen(true)} aria-haspopup="dialog" aria-expanded={isOpen} className="flex items-center gap-3 pt-2 text-left">
+      <button ref={triggerRef} type="button" onClick={openDialog} aria-haspopup="dialog" aria-expanded={isOpen} className="flex items-center gap-3 pt-2 text-left">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-[#d8cbba] text-[#b0a290]">
           <svg aria-hidden="true" className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14M5 12h14" />
@@ -61,8 +110,10 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
         <span className="text-[14.5px] font-extrabold text-[#c5503a]">Vincular otro padre</span>
       </button>
 
-      {isOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6">
-        <section role="dialog" aria-modal="true" aria-labelledby="add-parent-title" className="max-h-full w-full max-w-[480px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
+      {isOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6" onMouseDown={(event) => {
+        if (event.target === event.currentTarget) closeDialog();
+      }}>
+        <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="add-parent-title" className="max-h-full w-full max-w-[480px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
           <header className="flex items-center justify-between border-b border-[#ece0d0] px-5 py-5 sm:px-[26px]">
             <div>
               <h2 id="add-parent-title" className="font-display text-[18px] font-semibold text-text">Vincular padre</h2>
@@ -89,7 +140,7 @@ export function AddParentDialog({ kidName }: AddParentDialogProps) {
 
             <label className="mb-[18px] block">
               <span className="mb-2 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">NOMBRE DEL PADRE/MADRE</span>
-              <input name="parentName" value={formValues.parentName} onChange={(event) => updateField("parentName", event.target.value)} placeholder="Ej. Diego Fernández" aria-describedby={errors.parentName ? "parent-name-error" : undefined} aria-invalid={Boolean(errors.parentName)} className={`w-full rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b] ${errors.parentName ? "border-coral" : "border-[#eadfd0]"}`} />
+              <input ref={parentNameInputRef} name="parentName" value={formValues.parentName} onChange={(event) => updateField("parentName", event.target.value)} placeholder="Ej. Diego Fernández" aria-describedby={errors.parentName ? "parent-name-error" : undefined} aria-invalid={Boolean(errors.parentName)} className={`w-full rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] text-text outline-none placeholder:text-[#b6a99b] ${errors.parentName ? "border-coral" : "border-[#eadfd0]"}`} />
               {errors.parentName && <p id="parent-name-error" className="mt-1.5 text-[13px] font-bold text-coral-dark">{errors.parentName}</p>}
             </label>
 
