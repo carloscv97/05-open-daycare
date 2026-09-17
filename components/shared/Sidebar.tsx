@@ -37,7 +37,7 @@ function NavigationIcon({ icon }: { icon: string }) {
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ onCreatePost }: { onCreatePost?: (trigger: HTMLButtonElement) => void }) {
   const pathname = usePathname();
 
   return (
@@ -66,7 +66,9 @@ export function Sidebar() {
       </div>
       <button
         type="button"
-        className="mb-[18px] flex w-full items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-3 py-3 text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)]"
+        onClick={(event) => onCreatePost?.(event.currentTarget)}
+        aria-haspopup="dialog"
+        className="mb-[18px] flex w-full cursor-pointer items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-3 py-3 text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)] transition hover:brightness-95 hover:shadow-[0_10px_20px_-8px_rgba(238,129,100,0.85)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]"
       >
         <svg
           aria-hidden="true"
