@@ -1,6 +1,6 @@
 # SPEC 05 — Diálogo para vincular padre
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** Ninguno
 > **Fecha:** 2026-09-16
 > **Objetivo:** Añadir un diálogo modal visual en `/kids/[slug]` para capturar y validar una invitación de padre, madre o tutor sin persistirla ni modificar los padres vinculados.
@@ -46,18 +46,18 @@ Esta funcionalidad no introduce estructuras persistentes. `components/kids/AddPa
 
 ## Criterios de aceptación
 
-- [ ] Pulsar `Vincular otro padre` abre el diálogo en `/kids/[slug]`.
-- [ ] El encabezado muestra `Vincular padre` y el nombre dinámico del niño actual.
-- [ ] El diálogo muestra Nombre del padre/madre, Email, Parentesco, el aviso, el código `7K4P9` y `Vence en 7 días`.
-- [ ] Mamá, Papá y Tutor/a están disponibles y ninguna opción inicia seleccionada.
-- [ ] Enviar sin Nombre, Email o Parentesco muestra un error bajo cada campo requerido.
-- [ ] Un email con formato inválido muestra un error y mantiene abierto el diálogo con los valores escritos.
-- [ ] Enviar valores válidos cierra y limpia el formulario sin modificar los padres vinculados.
-- [ ] El botón X, el clic sobre el fondo y Escape cierran y descartan los valores escritos.
-- [ ] Al abrir, el foco se sitúa en Nombre del padre/madre; al cerrar vuelve a `Vincular otro padre`.
-- [ ] El fondo no se puede interactuar mientras el diálogo está abierto.
-- [ ] El diálogo es utilizable en escritorio y móvil mediante un ancho fluido y desplazamiento interno cuando sea necesario.
-- [ ] `npx eslint components/kids/AddParentDialog.tsx components/kids/LinkedParents.tsx app/kids/[slug]/page.tsx` finaliza sin errores.
+- [x] Pulsar `Vincular otro padre` abre el diálogo en `/kids/[slug]`.
+- [x] El encabezado muestra `Vincular padre` y el nombre dinámico del niño actual.
+- [x] El diálogo muestra Nombre del padre/madre, Email, Parentesco, el aviso, el código `7K4P9` y `Vence en 7 días`.
+- [x] Mamá, Papá y Tutor/a están disponibles y ninguna opción inicia seleccionada.
+- [x] Enviar sin Nombre, Email o Parentesco muestra un error bajo cada campo requerido.
+- [x] Un email con formato inválido muestra un error y mantiene abierto el diálogo con los valores escritos.
+- [x] Enviar valores válidos cierra y limpia el formulario sin modificar los padres vinculados.
+- [x] El botón X, el clic sobre el fondo y Escape cierran y descartan los valores escritos.
+- [x] Al abrir, el foco se sitúa en Nombre del padre/madre; al cerrar vuelve a `Vincular otro padre`.
+- [x] El fondo no se puede interactuar mientras el diálogo está abierto.
+- [x] El diálogo es utilizable en escritorio y móvil mediante un ancho fluido y desplazamiento interno cuando sea necesario.
+- [x] `npx eslint components/kids/AddParentDialog.tsx components/kids/LinkedParents.tsx app/kids/[slug]/page.tsx` finaliza sin errores.
 
 ## Decisiones
 

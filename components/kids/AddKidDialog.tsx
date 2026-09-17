@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { z } from "zod";
 
 const EMPTY_FORM_VALUES = {
   fullName: "",
@@ -13,19 +14,26 @@ const EMPTY_FORM_VALUES = {
 type FieldName = keyof typeof EMPTY_FORM_VALUES;
 type FormErrors = Partial<Record<FieldName, string>>;
 
-function getBirthDateError(birthDate: string) {
-  if (!birthDate.trim()) return "La fecha de nacimiento es obligatoria.";
+const BIRTH_DATE_PATTERN = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
-  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(birthDate);
-  if (!match) return "Usá el formato dd/mm/aaaa.";
+const addKidSchema = z.object({
+  fullName: z.string().trim().min(1, "El nombre completo es obligatorio."),
+  birthDate: z.string()
+    .trim()
+    .min(1, "La fecha de nacimiento es obligatoria.")
+    .regex(BIRTH_DATE_PATTERN, "Usá el formato dd/mm/aaaa.")
+    .refine((value) => {
+      const match = BIRTH_DATE_PATTERN.exec(value);
+      if (!match) return true;
 
-  const [, day, month, year] = match.map(Number);
-  const date = new Date(year, month - 1, day);
-
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-    return "Ingresá una fecha de calendario válida.";
-  }
-}
+      const [, day, month, year] = match.map(Number);
+      const date = new Date(year, month - 1, day);
+      return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+    }, "Ingresá una fecha de calendario válida."),
+  room: z.string().min(1, "Seleccioná una sala."),
+  allergies: z.string(),
+  medicalNotes: z.string(),
+});
 
 export function AddKidDialog() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,16 +65,19 @@ export function AddKidDialog() {
   }
 
   function handleSubmit() {
-    const nextErrors: FormErrors = {};
+    const result = addKidSchema.safeParse(formValues);
 
-    if (!formValues.fullName.trim()) nextErrors.fullName = "El nombre completo es obligatorio.";
-    if (!formValues.room) nextErrors.room = "Seleccioná una sala.";
+    if (result.success) {
+      closeDialog();
+      return;
+    }
 
-    const birthDateError = getBirthDateError(formValues.birthDate);
-    if (birthDateError) nextErrors.birthDate = birthDateError;
-
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) closeDialog();
+    const fieldErrors = z.flattenError(result.error).fieldErrors;
+    setErrors({
+      fullName: fieldErrors.fullName?.[0],
+      birthDate: fieldErrors.birthDate?.[0],
+      room: fieldErrors.room?.[0],
+    });
   }
 
   useEffect(() => {
@@ -111,7 +122,7 @@ export function AddKidDialog() {
 
   return (
     <>
-      <button ref={triggerRef} type="button" onClick={openDialog} aria-haspopup="dialog" aria-expanded={isOpen} className="flex shrink-0 items-center gap-2 rounded-[14px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-[18px] py-[11px] text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)]">
+      <button ref={triggerRef} type="button" onClick={openDialog} aria-haspopup="dialog" aria-expanded={isOpen} className="flex shrink-0 cursor-pointer items-center gap-2 rounded-[14px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-[18px] py-[11px] text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)] transition hover:brightness-95 hover:shadow-[0_10px_20px_-8px_rgba(238,129,100,0.85)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
         <svg aria-hidden="true" className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
           <path d="M12 5v14M5 12h14" />
         </svg>
@@ -124,9 +135,9 @@ export function AddKidDialog() {
         }}>
           <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="add-kid-title" className="max-h-full w-full max-w-[520px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
             <header className="flex items-center justify-between border-b border-[#ece0d0] px-5 py-5 sm:px-[26px]">
-              <button type="button" onClick={closeDialog} className="text-[15px] font-bold text-[#94887b]">Cancelar</button>
+              <button type="button" onClick={closeDialog} className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-bold text-[#94887b] transition hover:bg-[#f0e6d8] hover:text-[#6e6359] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">Cancelar</button>
               <h2 id="add-kid-title" className="font-display text-[18px] font-semibold text-text">Agregar niño</h2>
-              <button type="submit" form="add-kid-form" className="text-[15px] font-extrabold text-coral-dark">Guardar</button>
+              <button type="submit" form="add-kid-form" className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-extrabold text-coral-dark transition hover:bg-[#fff0eb] hover:text-[#a94230] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">Guardar</button>
             </header>
 
             <form id="add-kid-form" onSubmit={(event) => {
@@ -148,7 +159,7 @@ export function AddKidDialog() {
 
                 <label>
                   <span className="mb-2 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">SALA</span>
-                  <select name="room" value={formValues.room} onChange={(event) => updateField("room", event.target.value)} aria-describedby={errors.room ? "room-error" : undefined} aria-invalid={Boolean(errors.room)} className={`w-full rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] font-bold text-text outline-none ${errors.room ? "border-coral" : "border-[#eadfd0]"}`}>
+                  <select name="room" value={formValues.room} onChange={(event) => updateField("room", event.target.value)} aria-describedby={errors.room ? "room-error" : undefined} aria-invalid={Boolean(errors.room)} className={`w-full cursor-pointer rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] font-bold text-text outline-none ${errors.room ? "border-coral" : "border-[#eadfd0]"}`}>
                     <option value="" disabled>Seleccionar sala</option>
                     <option value="Soles">Soles</option>
                     <option value="Lunas">Lunas</option>

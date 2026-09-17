@@ -16,6 +16,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - El estilo usa Tailwind CSS 4 mediante `@import "tailwindcss"` en `app/globals.css`; no hay archivo de configuración de Tailwind.
 - `references/screenshots/` y `references/pantallas/` contienen material de referencia visual y HTML; Next.js no los compila como parte de la aplicación.
 
+## Tecnologías
+
+- Next.js 16 con App Router y React 19 para la aplicación web.
+- TypeScript estricto para el código de la aplicación.
+- Tailwind CSS 4 para estilos utilitarios, sin archivo de configuración.
+- Zod 4 para esquemas y validación de formularios del cliente.
+- ESLint 9 con `eslint-config-next` para análisis estático.
+
 ## Arquitectura de componentes
 
 - Organiza los componentes por dominio en `components/<dominio>/`; los específicos de una capacidad viven junto a su dominio.
@@ -27,6 +35,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Usa `PascalCase` para componentes.
 - Usa `camelCase` para funciones y variables.
 - Usa `UPPER_SNAKE_CASE` para constantes globales inmutables.
+
+## Interacción de la interfaz
+
+- Los elementos presionables deben comunicarlo claramente: usa `cursor-pointer`, estados `hover` y un indicador de foco visible coherente con el diseño.
+- Aplica esta práctica a botones, controles de selección, enlaces con apariencia de acción y cualquier otro elemento clicable; no la uses en campos de texto, que deben conservar su cursor de edición.
 
 ## Comandos
 
