@@ -1,6 +1,6 @@
 # SPEC 04 — Diálogo para agregar niño
 
-> **Estado:** Draft
+> **Estado:** Approved
 > **Depende de:** Ninguno
 > **Fecha:** 2026-09-16
 > **Objetivo:** Añadir un diálogo modal visual desde `/kids` para capturar y validar los datos básicos de un niño sin persistirlos ni modificar el listado.
@@ -66,11 +66,11 @@ Esta funcionalidad no introduce estructuras persistentes. `components/kids/AddKi
 
 ## Riesgos
 
-| Riesgo | Mitigación |
-| --- | --- |
-| El diálogo se desborda en pantallas pequeñas. | Usar ancho fluido, altura máxima y desplazamiento interno cuando sea necesario. |
+| Riesgo                                          | Mitigación                                                                              |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| El diálogo se desborda en pantallas pequeñas.   | Usar ancho fluido, altura máxima y desplazamiento interno cuando sea necesario.         |
 | El formato de fecha acepta fechas inexistentes. | Separar día, mes y año y comprobar que la fecha construida conserva los mismos valores. |
-| El foco queda perdido tras cerrar el diálogo. | Conservar una referencia al botón activador y restaurar el foco al cierre. |
+| El foco queda perdido tras cerrar el diálogo.   | Conservar una referencia al botón activador y restaurar el foco al cierre.              |
 
 ## Qué no incluye esta spec
 
