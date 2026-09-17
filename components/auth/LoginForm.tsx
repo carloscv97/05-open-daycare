@@ -17,7 +17,7 @@ export function LoginForm() {
       <h1 className="font-display text-[30px] font-semibold text-text">Iniciar sesión</h1>
       <p className="mb-7 mt-[6px] text-[15px] text-text-muted">Ingresá para ver el día de hoy.</p>
 
-      <label className="mb-2 block text-[12px] font-bold tracking-[0.7px] text-text-muted" htmlFor="login-email">
+      <label className="mb-2 block cursor-pointer text-[12px] font-bold tracking-[0.7px] text-text-muted transition-colors hover:text-text" htmlFor="login-email">
         EMAIL
       </label>
       <input
@@ -28,7 +28,7 @@ export function LoginForm() {
         type="email"
       />
 
-      <label className="mb-2 block text-[12px] font-bold tracking-[0.7px] text-text-muted" htmlFor="login-password">
+      <label className="mb-2 block cursor-pointer text-[12px] font-bold tracking-[0.7px] text-text-muted transition-colors hover:text-text" htmlFor="login-password">
         CONTRASEÑA
       </label>
       <input
@@ -39,15 +39,17 @@ export function LoginForm() {
         type="password"
       />
       <div className="mb-5 text-right">
-        <span className="cursor-pointer text-[13.5px] font-bold text-[#c5503a]">¿Olvidaste tu contraseña?</span>
+        <button className="cursor-pointer rounded-sm text-[13.5px] font-bold text-[#c5503a] transition-colors hover:text-[#a94230] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]" type="button">
+          ¿Olvidaste tu contraseña?
+        </button>
       </div>
 
-      <button className="w-full rounded-[15px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-4 py-[15px] text-[16px] font-extrabold text-white shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)]" type="submit">
+      <button className="w-full cursor-pointer rounded-[15px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-4 py-[15px] text-[16px] font-extrabold text-white shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]" type="submit">
         Iniciar sesión
       </button>
 
       <p className="mt-6 text-center text-[14.5px] text-text-muted">
-        ¿Te invitó la guardería? <Link className="font-extrabold text-[#c5503a]" href="/activate-account">Activá tu cuenta</Link>
+        ¿Te invitó la guardería? <Link className="cursor-pointer rounded-sm font-extrabold text-[#c5503a] transition-colors hover:text-[#a94230] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]" href="/activate-account">Activá tu cuenta</Link>
       </p>
     </form>
   );

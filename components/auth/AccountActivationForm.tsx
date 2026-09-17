@@ -29,7 +29,7 @@ export function AccountActivationForm() {
         </div>
       </section>
 
-      <label className="mb-2 block text-[12px] font-bold tracking-[0.7px] text-text-muted" htmlFor="activation-code">
+      <label className="mb-2 block cursor-pointer text-[12px] font-bold tracking-[0.7px] text-text-muted transition-colors hover:text-text" htmlFor="activation-code">
         CÓDIGO DE INVITACIÓN
       </label>
       <input
@@ -39,7 +39,7 @@ export function AccountActivationForm() {
         name="code"
       />
 
-      <label className="mb-2 block text-[12px] font-bold tracking-[0.7px] text-text-muted" htmlFor="activation-email">
+      <label className="mb-2 block cursor-pointer text-[12px] font-bold tracking-[0.7px] text-text-muted transition-colors hover:text-text" htmlFor="activation-email">
         EMAIL
       </label>
       <input
@@ -50,7 +50,7 @@ export function AccountActivationForm() {
         type="email"
       />
 
-      <label className="mb-2 block text-[12px] font-bold tracking-[0.7px] text-text-muted" htmlFor="activation-password">
+      <label className="mb-2 block cursor-pointer text-[12px] font-bold tracking-[0.7px] text-text-muted transition-colors hover:text-text" htmlFor="activation-password">
         CREAR CONTRASEÑA
       </label>
       <input
@@ -61,7 +61,7 @@ export function AccountActivationForm() {
         type="password"
       />
 
-      <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-[14px] bg-[#fbf1d6] px-4 py-[14px] text-[#8a7234]">
+      <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-[14px] bg-[#fbf1d6] px-4 py-[14px] text-[#8a7234] transition-colors hover:bg-[#f8e9c8] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[#c5503a]">
         <input
           checked={photoAuthorization}
           className="mt-1 h-6 w-6 shrink-0 accent-[#5fb97e]"
@@ -72,12 +72,12 @@ export function AccountActivationForm() {
         <span className="text-[14px] leading-[1.45]">Autorizo a la guardería a tomar y compartir fotos de mi hijo dentro de la app.</span>
       </label>
 
-      <button className="w-full rounded-[15px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-4 py-[15px] text-[16px] font-extrabold text-white shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)]" type="submit">
+      <button className="w-full cursor-pointer rounded-[15px] bg-gradient-to-b from-[#f4977e] to-[#ee8164] px-4 py-[15px] text-[16px] font-extrabold text-white shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]" type="submit">
         Activar mi cuenta
       </button>
 
       <p className="mt-[22px] text-center text-[14.5px] text-text-muted">
-        ¿Ya tenés cuenta? <Link className="font-extrabold text-[#c5503a]" href="/login">Iniciar sesión</Link>
+        ¿Ya tenés cuenta? <Link className="cursor-pointer rounded-sm font-extrabold text-[#c5503a] transition-colors hover:text-[#a94230] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]" href="/login">Iniciar sesión</Link>
       </p>
     </form>
   );
