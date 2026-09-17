@@ -1,6 +1,6 @@
 "use client";
 
-import type { RefObject } from "react";
+import { useState, type RefObject } from "react";
 
 type CreatePostDialogProps = {
   isOpen: boolean;
@@ -24,14 +24,38 @@ const POST_TYPES = [
   { id: "announcement", label: "Anuncio", className: "bg-[#ccd8f4] text-[#4e72c8]" },
 ] as const;
 
+type RecipientId = (typeof RECIPIENTS)[number]["id"];
+type PostType = (typeof POST_TYPES)[number]["id"];
+
 export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
+  const [recipients, setRecipients] = useState<RecipientId[] | "room">([]);
+  const [postType, setPostType] = useState<PostType | null>(null);
+  const [description, setDescription] = useState("");
+
+  function closeDialog() {
+    setRecipients([]);
+    setPostType(null);
+    setDescription("");
+    onClose();
+  }
+
+  function toggleRecipient(recipientId: RecipientId) {
+    setRecipients((currentRecipients) => {
+      if (currentRecipients === "room") return [recipientId];
+
+      return currentRecipients.includes(recipientId)
+        ? currentRecipients.filter((id) => id !== recipientId)
+        : [...currentRecipients, recipientId];
+    });
+  }
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6">
       <section className="max-h-full w-full max-w-[580px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
         <header className="flex items-center justify-between border-b border-[#ece0d0] px-5 py-5 sm:px-[26px]">
-          <button type="button" onClick={onClose} className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-bold text-[#94887b] transition hover:bg-[#f0e6d8] hover:text-[#6e6359] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
+          <button type="button" onClick={closeDialog} className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-bold text-[#94887b] transition hover:bg-[#f0e6d8] hover:text-[#6e6359] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
             Cancelar
           </button>
           <h2 className="font-display text-[18px] font-semibold text-text">Nueva publicación</h2>
@@ -45,12 +69,12 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
             <legend className="mb-2.5 text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">PARA</legend>
             <div className="flex flex-wrap gap-[9px]">
               {RECIPIENTS.map((recipient) => (
-                <button key={recipient.id} type="button" className="flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] border-[#ece0d0] bg-[#fffdf9] py-1 pl-1 pr-3.5 text-sm font-bold text-[#6e6359] transition hover:border-[#cbb89f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
+                <button key={recipient.id} type="button" onClick={() => toggleRecipient(recipient.id)} aria-pressed={Array.isArray(recipients) && recipients.includes(recipient.id)} className={`flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] py-1 pl-1 pr-3.5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${Array.isArray(recipients) && recipients.includes(recipient.id) ? "border-[#3f362e] bg-[#3f362e] text-white" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359] hover:border-[#cbb89f]"}`}>
                   <span className={`flex h-[26px] w-[26px] items-center justify-center rounded-full font-display text-[13px] font-semibold ${recipient.avatarClassName}`}>{recipient.initial}</span>
                   {recipient.label}
                 </button>
               ))}
-              <button type="button" className="cursor-pointer rounded-full border-[1.5px] border-[#ece0d0] bg-[#fffdf9] px-4 py-1.5 text-sm font-bold text-[#6e6359] transition hover:border-[#cbb89f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
+              <button type="button" onClick={() => setRecipients("room")} aria-pressed={recipients === "room"} className={`cursor-pointer rounded-full border-[1.5px] px-4 py-1.5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${recipients === "room" ? "border-[#3f362e] bg-[#3f362e] text-white" : "border-[#ece0d0] bg-[#fffdf9] text-[#6e6359] hover:border-[#cbb89f]"}`}>
                 Toda la sala
               </button>
             </div>
@@ -59,9 +83,9 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
           <fieldset className="mb-[22px]">
             <legend className="mb-2.5 text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">TIPO</legend>
             <div className="flex flex-wrap gap-[9px]">
-              {POST_TYPES.map((postType) => (
-                <button key={postType.id} type="button" className={`cursor-pointer rounded-full px-4 py-2 text-[13.5px] font-extrabold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${postType.className}`}>
-                  {postType.label}
+              {POST_TYPES.map((typeOption) => (
+                <button key={typeOption.id} type="button" onClick={() => setPostType(typeOption.id)} aria-pressed={typeOption.id === postType} className={`cursor-pointer rounded-full px-4 py-2 text-[13.5px] font-extrabold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a] ${typeOption.id === postType ? "ring-2 ring-[#3f362e] ring-offset-2" : ""} ${typeOption.className}`}>
+                  {typeOption.label}
                 </button>
               ))}
             </div>
@@ -69,7 +93,7 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
 
           <label className="mb-[22px] block">
             <span className="mb-2.5 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">DESCRIPCIÓN</span>
-            <textarea placeholder="Contá cómo le fue hoy…" className="min-h-[120px] w-full resize-y rounded-[14px] border-[1.5px] border-[#eadfd0] bg-white px-4 py-[13px] text-[15px] leading-[1.5] text-text outline-none placeholder:text-[#b6a99b] focus:border-[#cbb89f]" />
+            <textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Contá cómo le fue hoy…" className="min-h-[120px] w-full resize-y rounded-[14px] border-[1.5px] border-[#eadfd0] bg-white px-4 py-[13px] text-[15px] leading-[1.5] text-text outline-none placeholder:text-[#b6a99b] focus:border-[#cbb89f]" />
           </label>
 
           <section aria-labelledby="photos-heading">
