@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type RefObject } from "react";
+import { useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
 import { z } from "zod";
 
 type CreatePostDialogProps = {
@@ -35,11 +35,14 @@ const createPostSchema = z.object({
   description: z.string().trim().min(1, "Escribí una descripción."),
 });
 
-export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
+export function CreatePostDialog({ isOpen, onClose, triggerRef }: CreatePostDialogProps) {
   const [recipients, setRecipients] = useState<RecipientId[] | "room">([]);
   const [postType, setPostType] = useState<PostType | null>(null);
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
+  const dialogRef = useRef<HTMLElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const hasOpenedRef = useRef(false);
 
   function closeDialog() {
     setRecipients([]);
@@ -84,16 +87,62 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
     closeDialog();
   }
 
+  const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    if (event.key === "Escape") {
+      closeDialog();
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusableElements = dialogRef.current?.querySelectorAll<HTMLElement>("button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])");
+    if (!focusableElements?.length) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  });
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (hasOpenedRef.current) {
+        triggerRef.current?.focus();
+        hasOpenedRef.current = false;
+      }
+      return;
+    }
+
+    hasOpenedRef.current = true;
+    const previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    descriptionRef.current?.focus();
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, triggerRef]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6">
-      <section className="max-h-full w-full max-w-[580px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f362e]/35 p-4 sm:p-6" onMouseDown={(event) => {
+      if (event.target === event.currentTarget) closeDialog();
+    }}>
+      <section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="create-post-title" className="max-h-full w-full max-w-[580px] overflow-y-auto rounded-[24px] border border-[#ece0d0] bg-[#fbf4ec] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)]">
         <header className="flex items-center justify-between border-b border-[#ece0d0] px-5 py-5 sm:px-[26px]">
           <button type="button" onClick={closeDialog} className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-bold text-[#94887b] transition hover:bg-[#f0e6d8] hover:text-[#6e6359] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
             Cancelar
           </button>
-          <h2 className="font-display text-[18px] font-semibold text-text">Nueva publicación</h2>
+          <h2 id="create-post-title" className="font-display text-[18px] font-semibold text-text">Nueva publicación</h2>
           <button type="submit" form="create-post-form" className="cursor-pointer rounded-md px-1.5 py-1 text-[15px] font-extrabold text-coral-dark transition hover:bg-[#fff0eb] hover:text-[#a94230] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5503a]">
             Publicar
           </button>
@@ -139,7 +188,7 @@ export function CreatePostDialog({ isOpen, onClose }: CreatePostDialogProps) {
 
           <label className="mb-[22px] block">
             <span className="mb-2.5 block text-[12px] font-extrabold tracking-[0.7px] text-[#94887b]">DESCRIPCIÓN</span>
-            <textarea value={description} onChange={(event) => {
+            <textarea ref={descriptionRef} value={description} onChange={(event) => {
               clearError("description");
               setDescription(event.target.value);
             }} placeholder="Contá cómo le fue hoy…" aria-describedby={errors.description ? "description-error" : undefined} aria-invalid={Boolean(errors.description)} className={`min-h-[120px] w-full resize-y rounded-[14px] border-[1.5px] bg-white px-4 py-[13px] text-[15px] leading-[1.5] text-text outline-none placeholder:text-[#b6a99b] focus:border-[#cbb89f] ${errors.description ? "border-coral" : "border-[#eadfd0]"}`} />
