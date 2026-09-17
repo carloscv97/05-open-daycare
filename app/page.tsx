@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { CreatePostDialog } from "@/components/home/CreatePostDialog";
 import { FeedComposer } from "@/components/home/FeedComposer";
 import { FeedPostCard } from "@/components/home/FeedPostCard";
 import { CreatePostButton } from "@/components/shared/CreatePostButton";
@@ -6,9 +10,17 @@ import { Sidebar } from "@/components/shared/Sidebar";
 import { feedPosts } from "@/lib/mock-feed";
 
 export default function Home() {
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const activeTriggerRef = useRef<HTMLElement>(null);
+
+  function openCreatePost(trigger: HTMLButtonElement) {
+    activeTriggerRef.current = trigger;
+    setIsCreatePostOpen(true);
+  }
+
   return (
     <div className="flex min-h-screen bg-canvas">
-      <Sidebar />
+      <Sidebar onCreatePost={openCreatePost} />
       <main className="min-w-0 flex-1">
         <div className="mx-auto w-full max-w-[760px] px-5 py-8 pb-24 sm:px-10 sm:pt-[34px] sm:pb-20">
           <header className="mb-6">
@@ -29,8 +41,9 @@ export default function Home() {
           </section>
         </div>
       </main>
-      <CreatePostButton />
+      <CreatePostButton onCreatePost={openCreatePost} />
       <MobileNavigation />
+      <CreatePostDialog isOpen={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} triggerRef={activeTriggerRef} />
     </div>
   );
 }
